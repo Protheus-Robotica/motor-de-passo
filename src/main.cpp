@@ -24,7 +24,7 @@ public:
     int out_port, dir_port, en_port; 
     bool direction;
 
-    Stepper(volatile uint16_t *OCRA, volatile uint8_t *TCCRA, volatile uint8_t *TCCRB, volatile uint8_t *TIMSK, volatile uint8_t *TIFR, const int out_port, const int dir_port, const int en_port);
+    Stepper(volatile uint16_t *OCRA, volatile uint8_t *TCCRA, volatile uint8_t *TCCRB, volatile uint8_t *TIMSK, const int out_port, const int dir_port, const int en_port);
     void setSpeed(short speed);
     void setDirection(bool direction, int16_t steps);
 };
@@ -40,7 +40,7 @@ Stepper::Stepper(volatile uint16_t *c_OCRA, volatile uint8_t *c_TCCRA, volatile 
     en_port = c_en_port;
 
     *OCRA = this->timer_reset_v;
-    *TCCRA |= (1 << );
+    *TCCRA |= (1 << COM1A0);
     *TCCRB |= ((1 << WGM12) | (1 << CS11));
     *TIMSK |= (1 << OCIE1A); // "| (1 << OCIE1B) | (1 << OCIE1C)" TO ENABLE OTHER MATCH COMPARE INTERUPTS
     direction = false;
@@ -116,7 +116,6 @@ ISR(TIMER4_OVF_vect)
 }
 
 
- main()
 void setup() {
     Serial.begin(9600);
     motor[0] = Stepper(&OCR1A, &TCCR1A, &TCCR1B, &TIMSK1, MOTOR_OUT_1, MOTOR_DIR_1, MOTOR_EN_1);
